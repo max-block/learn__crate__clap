@@ -1,17 +1,30 @@
 use clap::Clap;
 
+#[derive(Clap, Debug)]
+struct PlusCmd {
+    a: i32,
+    b: i32
+}
+
 /// It's a help message for the cli. Bla bla bla.
 #[derive(Clap)]
-struct Opts {
-    /// First argument
-    name: String,
+enum SubCommand {
+    #[clap()]
+    Plus(PlusCmd)
+}
 
-    /// Second argument
-    age: u32,
+#[derive(Clap)]
+struct Opts {
+    #[clap(subcommand)]
+    subcommand: SubCommand
+
 }
 
 fn main() {
     let opts = Opts::parse();
-    println!("name: {}", opts.name);
-    println!("age: {}", opts.age);
+    match opts.subcommand {
+        SubCommand::Plus(cmd) => {
+            println!("process `plus` cmd: {:?}", cmd);
+        }        
+    }
 }
